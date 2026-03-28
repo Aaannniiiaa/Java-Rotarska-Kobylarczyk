@@ -1,5 +1,6 @@
 package org.example.projectmanagerapp.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.projectmanagerapp.entity.Task;
@@ -33,7 +34,10 @@ public class TaskController {
             summary = "Dodaj nowe zadanie",
             description = "Tworzy nowe zadanie i zapisuje je w bazie danych"
     )
-    public Task createTask(@RequestBody Task task) {
+    public Task createTask(
+            @Parameter(description = "Obiekt zadania przekazywany w żądaniu")
+            @RequestBody Task task
+    ) {
         return taskRepository.save(task);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.projectmanagerapp.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,10 @@ public class ProjectController {
             summary = "Dodaj nowy projekt",
             description = "Tworzy nowy projekt i zapisuje go w bazie danych"
     )
-    public Project createProject(@RequestBody Project project) {
+    public Project createProject(
+            @Parameter(description = "Obiekt projektu przekazywany w żądaniu")
+            @RequestBody Project project
+    ) {
         return projectRepository.save(project);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.projectmanagerapp.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.projectmanagerapp.entity.Users;
@@ -33,7 +34,10 @@ public class UserController {
             summary = "Dodaj nowego użytkownika",
             description = "Tworzy nowego użytkownika i zapisuje go w bazie danych"
     )
-    public Users createUser(@RequestBody Users user) {
+    public Users createUser(
+            @Parameter(description = "Obiekt użytkownika przekazywany w żądaniu")
+            @RequestBody Users user
+    ) {
         return userRepository.save(user);
     }
 }
