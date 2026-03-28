@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.projectmanagerapp.entity.Project;
-import org.example.projectmanagerapp.repository.ProjectRepository;
+import org.example.projectmanagerapp.service.ProjectService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @Tag(name = "Projects", description = "Operacje na projektach")
 public class ProjectController {
 
-    private final ProjectRepository projectRepository;
+    private final ProjectService projectService;
 
     @GetMapping
     @Operation(
@@ -24,7 +24,7 @@ public class ProjectController {
             description = "Zwraca listę wszystkich projektów zapisanych w bazie danych"
     )
     public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+        return projectService.getAllProjects();
     }
 
     @PostMapping
@@ -36,6 +36,6 @@ public class ProjectController {
             @Parameter(description = "Obiekt projektu przekazywany w żądaniu")
             @RequestBody Project project
     ) {
-        return projectRepository.save(project);
+        return projectService.createProject(project);
     }
 }
