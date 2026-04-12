@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.projectmanagerapp.entity.Task;
-import org.example.projectmanagerapp.repository.TaskRepository;
+import org.example.projectmanagerapp.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +14,10 @@ import java.util.List;
 @Tag(name = "Tasks", description = "Operacje na zadaniach")
 public class TaskController {
 
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping
@@ -26,7 +26,7 @@ public class TaskController {
             description = "Zwraca listę wszystkich zadań zapisanych w bazie danych"
     )
     public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+        return taskService.getAllTasks();
     }
 
     @PostMapping
@@ -38,6 +38,6 @@ public class TaskController {
             @Parameter(description = "Obiekt zadania przekazywany w żądaniu")
             @RequestBody Task task
     ) {
-        return taskRepository.save(task);
+        return taskService.createTask(task);
     }
 }
