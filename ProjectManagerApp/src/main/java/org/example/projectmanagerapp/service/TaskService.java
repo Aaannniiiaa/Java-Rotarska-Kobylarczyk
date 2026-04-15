@@ -22,4 +22,23 @@ public class TaskService {
     public Task createTask(Task task) {
         return taskRepository.save(task);
     }
+
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+    }
+
+    public Task updateTask(Long id, Task updatedTask) {
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        existingTask.setTitle(updatedTask.getTitle());
+        existingTask.setDescription(updatedTask.getDescription());
+
+        return taskRepository.save(existingTask);
+    }
+
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
 }
