@@ -39,12 +39,28 @@ public class ProjectController {
         return projectService.createProject(project);
     }
     @PutMapping("/{id}")
-    public Project updateProject(@PathVariable Long id, @RequestBody Project project) {
+    @Operation(
+            summary = "Zaktualizuj projekt",
+            description = "Aktualizuje dane istniejącego projektu na podstawie jego ID"
+    )
+    public Project updateProject(
+            @Parameter(description = "ID projektu, który ma zostać zaktualizowany")
+            @PathVariable Long id,
+            @Parameter(description = "Nowe dane projektu")
+            @RequestBody Project project
+    ) {
         return projectService.updateProject(id, project);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProject(@PathVariable Long id) {
+    @Operation(
+            summary = "Usuń projekt",
+            description = "Usuwa projekt z bazy danych na podstawie jego ID"
+    )
+    public void deleteProject(
+            @Parameter(description = "ID projektu, który ma zostać usunięty")
+            @PathVariable Long id
+    ) {
         projectService.deleteProject(id);
     }
 }
