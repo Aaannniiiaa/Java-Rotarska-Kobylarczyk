@@ -41,12 +41,28 @@ public class UserController {
         return userService.createUser(user);
     }
     @PutMapping("/{id}")
-    public Users updateUser(@PathVariable Long id, @RequestBody Users user) {
+    @Operation(
+            summary = "Zaktualizuj użytkownika",
+            description = "Aktualizuje dane istniejącego użytkownika na podstawie jego ID"
+    )
+    public Users updateUser(
+            @Parameter(description = "ID użytkownika, którego dane mają zostać zaktualizowane")
+            @PathVariable Long id,
+            @Parameter(description = "Nowe dane użytkownika")
+            @RequestBody Users user
+    ) {
         return userService.updateUser(id, user);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    @Operation(
+            summary = "Usuń użytkownika",
+            description = "Usuwa użytkownika z bazy danych na podstawie jego ID"
+    )
+    public void deleteUser(
+            @Parameter(description = "ID użytkownika, który ma zostać usunięty")
+            @PathVariable Long id
+    ) {
         userService.deleteUser(id);
     }
 }

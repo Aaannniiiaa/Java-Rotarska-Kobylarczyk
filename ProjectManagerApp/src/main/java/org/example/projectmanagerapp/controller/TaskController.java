@@ -41,12 +41,26 @@ public class TaskController {
         return taskService.createTask(task);
     }
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+    @Operation(
+            summary = "Zaktualizuj zadanie",
+            description = "Aktualizuje dane istniejącego zadania na podstawie jego ID"
+    )
+    public Task updateTask(
+            @Parameter(description = "ID zadania, które ma zostać zaktualizowane")
+            @PathVariable Long id,
+            @Parameter(description = "Nowe dane zadania")
+            @RequestBody Task task
+    ) {
         return taskService.updateTask(id, task);
     }
-
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id) {
+    @Operation(
+            summary = "Usuń zadanie",
+            description = "Usuwa zadanie z bazy danych na podstawie jego ID"
+    )
+    public void deleteTask(
+            @Parameter(description = "ID zadania, które ma zostać usunięte")
+            @PathVariable Long id
+    ) {
         taskService.deleteTask(id);
-    }
-}
+    }}
