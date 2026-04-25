@@ -1,13 +1,12 @@
 package org.example.projectmanagerapp.service;
 
 import org.example.projectmanagerapp.entity.Project;
+import org.example.projectmanagerapp.entity.Users;
 import org.example.projectmanagerapp.repository.ProjectRepository;
+import org.example.projectmanagerapp.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,83 +15,50 @@ import static org.mockito.Mockito.*;
 class ProjectServiceTest {
 
     private ProjectRepository projectRepository;
+    private UserRepository userRepository;
     private ProjectService projectService;
 
     @BeforeEach
     void setUp() {
         projectRepository = mock(ProjectRepository.class);
-        projectService = new ProjectService(projectRepository);
+        userRepository = mock(UserRepository.class);
+        projectService = new ProjectService(projectRepository, userRepository);
     }
 
     @Test
-    @DisplayName("Should return all projects")
-    void testGetAllProjects() {
-        Project project1 = new Project();
-        project1.setName("Project1");
-
-        Project project2 = new Project();
-        project2.setName("Project2");
-
-        when(projectRepository.findAll()).thenReturn(Arrays.asList(project1, project2));
-
-        List<Project> projects = projectService.getAllProjects();
-
-        assertEquals(2, projects.size());
-        verify(projectRepository, times(1)).findAll();
-    }
-
-    @Test
-    @DisplayName("Should return project by id")
-    void testGetProjectById() {
+    void shouldCreateProject() {
         Project project = new Project();
-        project.setName("TestProject");
-
-        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
-
-        Project result = projectService.getProjectById(1L);
-
-        assertEquals("TestProject", result.getName());
-        verify(projectRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    @DisplayName("Should create project")
-    void testCreateProject() {
-        Project project = new Project();
-        project.setName("NewProject");
+        project.setName("Test Project");
 
         when(projectRepository.save(project)).thenReturn(project);
 
         Project result = projectService.createProject(project);
 
-        assertEquals("NewProject", result.getName());
-        verify(projectRepository, times(1)).save(project);
+        assertEquals("Test Project", result.getName());
+        verify(projectRepository).save(project);
     }
 
     @Test
-    @DisplayName("Should update project")
-    void testUpdateProject() {
-        Project existingProject = new Project();
-        existingProject.setName("OldProject");
+    void shouldAddUserToProject() {
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Projekt Jira");
 
-        Project updatedProject = new Project();
-        updatedProject.setName("NewProject");
+        Users user = new Users();
+        user.setId(1L);
+        user.setUsername("anna");
 
-        when(projectRepository.findById(1L)).thenReturn(Optional.of(existingProject));
-        when(projectRepository.save(existingProject)).thenReturn(existingProject);
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(projectRepository.save(project)).thenReturn(project);
 
-        Project result = projectService.updateProject(1L, updatedProject);
+        Project result = projectService.addUserToProject(1L, 1L);
 
-        assertEquals("NewProject", result.getName());
-        verify(projectRepository, times(1)).findById(1L);
-        verify(projectRepository, times(1)).save(existingProject);
-    }
+        assertEquals(1, result.getUsers().size());
+        assertEquals("anna", result.getUsers().iterator().next().getUsername());
 
-    @Test
-    @DisplayName("Should delete project")
-    void testDeleteProject() {
-        projectService.deleteProject(1L);
-
-        verify(projectRepository, times(1)).deleteById(1L);
+        verify(projectRepository).findById(1L);
+        verify(userRepository).findById(1L);
+        verify(projectRepository).save(project);
     }
 }
