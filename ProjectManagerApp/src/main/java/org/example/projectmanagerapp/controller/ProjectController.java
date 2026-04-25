@@ -27,6 +27,18 @@ public class ProjectController {
         return projectService.getAllProjects();
     }
 
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Pobierz projekt po ID",
+            description = "Zwraca jeden projekt na podstawie jego ID"
+    )
+    public Project getProjectById(
+            @Parameter(description = "ID projektu")
+            @PathVariable Long id
+    ) {
+        return projectService.getProjectById(id);
+    }
+
     @PostMapping
     @Operation(
             summary = "Dodaj nowy projekt",
@@ -38,6 +50,7 @@ public class ProjectController {
     ) {
         return projectService.createProject(project);
     }
+
     @PutMapping("/{id}")
     @Operation(
             summary = "Zaktualizuj projekt",
@@ -46,10 +59,26 @@ public class ProjectController {
     public Project updateProject(
             @Parameter(description = "ID projektu, który ma zostać zaktualizowany")
             @PathVariable Long id,
+
             @Parameter(description = "Nowe dane projektu")
             @RequestBody Project project
     ) {
         return projectService.updateProject(id, project);
+    }
+
+    @PostMapping("/{projectId}/users/{userId}")
+    @Operation(
+            summary = "Przypisz użytkownika do projektu",
+            description = "Dodaje użytkownika do listy członków projektu"
+    )
+    public Project addUserToProject(
+            @Parameter(description = "ID projektu")
+            @PathVariable Long projectId,
+
+            @Parameter(description = "ID użytkownika")
+            @PathVariable Long userId
+    ) {
+        return projectService.addUserToProject(projectId, userId);
     }
 
     @DeleteMapping("/{id}")
